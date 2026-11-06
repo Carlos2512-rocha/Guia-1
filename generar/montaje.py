@@ -32,14 +32,14 @@ NOMBRES = {"carlos": "Carlos Andrés Infante Rocha", "juanpablo": "Juan Pablo Go
 
 # (numero, quien, clips de animación, parte)
 SEGMENTOS = [
-    (1, "carlos",    ["op3_00", "op3_01"],           "Presentación y problema"),
-    (2, "carlos",    ["op3_02", "op3_03"],           "Superficie, normal y borde"),
-    (3, "carlos",    ["op3_04"],                     "Rotacional"),
-    (4, "carlos",    ["op3_05"],                     "Camino 1: superficie"),
-    (5, "juanpablo", ["op3_06"],                     "Camino 2: línea"),
-    (6, "juanpablo", ["op3_07"],                     "Conclusión"),
-    (7, "juanpablo", ["mec_00", "mec_01", "mec_02"], "Mecatrónica: problema y superficie"),
-    (8, "juanpablo", ["mec_03", "mec_04"],           "Mecatrónica: línea y aplicación"),
+    (1, "carlos",    ["op3_00", "op3_01"],           "Ejercicio 1 · Presentación"),
+    (2, "carlos",    ["op3_02", "op3_03"],           "Ejercicio 1 · Superficie y borde"),
+    (3, "carlos",    ["op3_04"],                     "Ejercicio 1 · Rotacional"),
+    (4, "carlos",    ["op3_05"],                     "Ejercicio 1 · Camino 1"),
+    (5, "juanpablo", ["op3_06"],                     "Ejercicio 1 · Camino 2"),
+    (6, "juanpablo", ["op3_07"],                     "Ejercicio 1 · Conclusión"),
+    (7, "juanpablo", ["mec_00", "mec_01", "mec_02"], "Ejercicio 2 · Mecatrónica"),
+    (8, "juanpablo", ["mec_03", "mec_04"],           "Ejercicio 2 · Línea y conclusión"),
 ]
 
 
@@ -166,7 +166,7 @@ def segmento(n, quien, clips, parte):
         cam = cam_v
     D = duracion(cam) if cam else A
     nombre = NOMBRES[quien]
-    titulo = esc(f"Teorema de Stokes  ·  {parte}")
+    titulo = esc(parte)
 
     if cam:
         izq = (f"[1:v]scale=640:1080:force_original_aspect_ratio=increase,"
