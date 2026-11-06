@@ -9,11 +9,17 @@
 Pantalla dividida: **a la izquierda, ustedes** (la grabación del celular); **a la derecha, el ejercicio
 animado**, que se ajusta solo a lo que dure su voz. Vista previa: `salida/video_final.mp4`.
 
-## Cómo grabar (cada uno, ~2 min en total)
+## Cómo grabar: UN solo video por persona (~2 min cada uno)
+
+- **Carlos** graba un video con sus partes **1, 3, 5 y 7** en ese orden → `carlos.mp4`.
+- **Juan Pablo** graba un video con sus partes **2, 4, 6 y 8** en ese orden → `juanpablo.mp4`.
+- Entre parte y parte: **quédense callados 2–3 segundos** (pueden quedarse mirando a la cámara).
+  Esas pausas son las que uso para cortar y poner cada parte en su lugar.
+- Si se equivocan en una parte, hagan la pausa y repitan esa parte completa; me avisan cuál repitieron.
 
 - Celular **en vertical**, a la altura de la cara, **luz de frente** (ventana o lámpara delante, no detrás).
 - Lugar sin ruido. Pueden mover las manos al explicar; en el clip 02 muestren la **mano derecha con el pulgar arriba**.
-- **Un clip por fila** de la tabla, con el nombre exacto (ej. `01_carlos.mp4`). Mándenlos por este chat.
+- (También sirven clips sueltos por parte, con el nombre exacto, ej. `01_carlos.mp4`.)
 - Duración sugerida entre paréntesis. Si se pasan un poco no importa: el total debe quedar bajo **5:00**.
 - Las frases son guía: díganlas **con sus palabras**, no hace falta leerlas exacto.
 
@@ -32,8 +38,8 @@ animado**, que se ajusta solo a lo que dure su voz. Vista previa: `salida/video_
 
 En vez de video, cada uno manda:
 - **Una foto de frente**, bien iluminada: `carlos.jpg` y `juanpablo.jpg`.
-- **Su voz real** en audios separados (notas de voz del celular sirven): `01_carlos.m4a`,
-  `02_juanpablo.m4a`, … `08_juanpablo.m4a`, con el texto de la tabla de arriba.
+- **Su voz real** en **un solo audio por persona** (nota de voz del celular): `carlos.m4a` y
+  `juanpablo.m4a`, con sus partes en orden y la misma pausa de 2–3 s entre cada una.
 
 En el video, la foto aparece a la izquierda con un acercamiento lento mientras suena su voz.
 Se pueden mezclar: unos clips en video y otros con foto + audio.

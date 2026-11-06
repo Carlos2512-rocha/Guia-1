@@ -4,7 +4,11 @@
 Izquierda (640x1080): la grabación real de quien habla (celular en vertical).
 Derecha (1280x720):   la animación del ejercicio, ajustada a la duración de la voz.
 
-Pon las grabaciones en ./grabaciones/ con estos nombres (mp4 o mov):
+Lo más fácil: UN video por persona (carlos.mp4, juanpablo.mp4) con sus partes en orden
+y una pausa de 2-3 s en silencio entre parte y parte; se corta solo por las pausas.
+(También sirve UN audio por persona, carlos.m4a, junto con la foto carlos.jpg.)
+
+O clips sueltos en ./grabaciones/ con estos nombres (mp4 o mov):
     01_carlos.mp4, 02_juanpablo.mp4, 03_carlos.mp4, ...  (ver SEGMENTOS)
 Alternativa sin video: una foto de cada uno (carlos.jpg, juanpablo.jpg) y la voz
 de cada clip como audio (01_carlos.m4a, 02_juanpablo.m4a, ...).
@@ -61,11 +65,63 @@ def esc(t):
     return t.replace("\\", "\\\\").replace(":", "\\:").replace("'", "’")
 
 
+EXT_VIDEO = ("mp4", "mov", "MP4", "MOV", "m4v", "webm")
+EXT_AUDIO = ("m4a", "mp3", "wav", "ogg", "opus", "aac", "M4A", "MP3", "WAV")
+
+
+def buscar(base, exts):
+    for ext in exts:
+        f = os.path.join(GRAB, f"{base}.{ext}")
+        if os.path.exists(f):
+            return f
+    return None
+
+
+def partir_por_pausas(archivo, quien, numeros):
+    """Corta una grabación larga en len(numeros) partes usando las pausas más largas."""
+    out = subprocess.run(["ffmpeg", "-i", archivo, "-af", "silencedetect=noise=-35dB:d=1.0",
+                          "-f", "null", "-"], capture_output=True, text=True).stderr
+    ini = [float(l.split("silence_start: ")[1].split()[0]) for l in out.splitlines() if "silence_start" in l]
+    fin = [float(l.split("silence_end: ")[1].split()[0]) for l in out.splitlines() if "silence_end" in l]
+    total = duracion(archivo)
+    pausas = [(b - a, a, b) for a, b in zip(ini, fin) if a > 0.5 and b < total - 0.5]
+    faltan = len(numeros) - 1
+    if len(pausas) < faltan:
+        raise RuntimeError(f"{os.path.basename(archivo)}: encontré {len(pausas)} pausas y necesito "
+                           f"{faltan}. Hagan una pausa de 2-3 s en silencio entre cada parte.")
+    cortes = sorted(pausas, reverse=True)[:faltan]
+    cortes = sorted(cortes, key=lambda p: p[1])
+    tramos, t0 = [], 0.0
+    for _, a, b in cortes:
+        tramos.append((t0, a + 0.3))
+        t0 = b - 0.3
+    tramos.append((t0, total))
+    es_video = archivo.lower().endswith(tuple(e.lower() for e in EXT_VIDEO))
+    for n, (a, b) in zip(numeros, tramos):
+        dst = os.path.join(TMP, f"{n:02d}_{quien}." + ("mp4" if es_video else "m4a"))
+        cmd = ["ffmpeg", "-y", "-ss", f"{a}", "-to", f"{b}", "-i", archivo]
+        cmd += (["-c:v", "libx264", "-preset", "fast", "-c:a", "aac"] if es_video else ["-vn", "-c:a", "aac"])
+        run(cmd + [dst])
+        print(f"  {os.path.basename(archivo)} -> parte {n:02d}: {a:6.1f}s a {b:6.1f}s")
+
+
+def preparar_grabaciones_unicas():
+    """Si hay un solo archivo por persona (carlos.mp4 / carlos.m4a), lo parte en sus clips."""
+    for quien in NOMBRES:
+        numeros = [n for n, q, _, _ in SEGMENTOS if q == quien]
+        if any(buscar(f"{n:02d}_{quien}", EXT_VIDEO + EXT_AUDIO) for n in numeros):
+            continue  # ya mandaron clips sueltos
+        unico = buscar(quien, EXT_VIDEO) or buscar(quien, EXT_AUDIO)
+        if unico:
+            partir_por_pausas(unico, quien, numeros)
+
+
 def grabacion(n, quien):
-    for ext in ("mp4", "mov", "MP4", "MOV", "m4v", "webm"):
-        hits = glob.glob(os.path.join(GRAB, f"{n:02d}_{quien}.{ext}"))
-        if hits:
-            return hits[0]
+    for carpeta in (GRAB, TMP):
+        for ext in EXT_VIDEO:
+            hits = glob.glob(os.path.join(carpeta, f"{n:02d}_{quien}.{ext}"))
+            if hits:
+                return hits[0]
     return None
 
 
@@ -77,10 +133,11 @@ def foto_y_audio(n, quien):
                glob.glob(os.path.join(GRAB, f"{n:02d}_{quien}.{ext}"))
         if hits:
             foto = hits[0]
-    for ext in ("m4a", "mp3", "wav", "ogg", "opus", "aac", "M4A", "MP3", "WAV"):
-        hits = glob.glob(os.path.join(GRAB, f"{n:02d}_{quien}.{ext}"))
-        if hits:
-            audio = hits[0]
+    for carpeta in (GRAB, TMP):
+        for ext in EXT_AUDIO:
+            hits = glob.glob(os.path.join(carpeta, f"{n:02d}_{quien}.{ext}"))
+            if hits and not audio:
+                audio = hits[0]
     return (foto, audio) if foto and audio else (None, None)
 
 
@@ -157,6 +214,9 @@ def segmento(n, quien, clips, parte):
 def main():
     os.makedirs(TMP, exist_ok=True)
     os.makedirs(GRAB, exist_ok=True)
+    for f in glob.glob(os.path.join(TMP, "[0-9][0-9]_*")):
+        os.remove(f)
+    preparar_grabaciones_unicas()
     partes, total = [], 0.0
     for s in SEGMENTOS:
         out, d = segmento(*s)
