@@ -9,7 +9,7 @@ y una pausa de 2-3 s en silencio entre parte y parte; se corta solo por las paus
 (También sirve UN audio por persona, carlos.m4a, junto con la foto carlos.jpg.)
 
 O clips sueltos en ./grabaciones/ con estos nombres (mp4 o mov):
-    01_carlos.mp4, 02_juanpablo.mp4, 03_carlos.mp4, ...  (ver SEGMENTOS)
+    01_carlos.mp4 ... 04_carlos.mp4, 05_juanpablo.mp4 ... 08_juanpablo.mp4  (ver SEGMENTOS)
 Alternativa sin video: una foto de cada uno (carlos.jpg, juanpablo.jpg) y la voz
 de cada clip como audio (01_carlos.m4a, 02_juanpablo.m4a, ...).
 Si falta una grabación, se pone un recuadro "GRABAR AQUÍ" (vista previa).
@@ -33,12 +33,12 @@ NOMBRES = {"carlos": "Carlos Andrés Infante Rocha", "juanpablo": "Juan Pablo Go
 # (numero, quien, clips de animación, parte)
 SEGMENTOS = [
     (1, "carlos",    ["op3_00", "op3_01"],           "Presentación y problema"),
-    (2, "juanpablo", ["op3_02", "op3_03"],           "Superficie, normal y borde"),
+    (2, "carlos",    ["op3_02", "op3_03"],           "Superficie, normal y borde"),
     (3, "carlos",    ["op3_04"],                     "Rotacional"),
-    (4, "juanpablo", ["op3_05"],                     "Camino 1: superficie"),
-    (5, "carlos",    ["op3_06"],                     "Camino 2: línea"),
+    (4, "carlos",    ["op3_05"],                     "Camino 1: superficie"),
+    (5, "juanpablo", ["op3_06"],                     "Camino 2: línea"),
     (6, "juanpablo", ["op3_07"],                     "Conclusión"),
-    (7, "carlos",    ["mec_00", "mec_01", "mec_02"], "Mecatrónica: problema y superficie"),
+    (7, "juanpablo", ["mec_00", "mec_01", "mec_02"], "Mecatrónica: problema y superficie"),
     (8, "juanpablo", ["mec_03", "mec_04"],           "Mecatrónica: línea y aplicación"),
 ]
 
