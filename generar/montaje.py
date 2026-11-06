@@ -6,6 +6,8 @@ Derecha (1280x720):   la animación del ejercicio, ajustada a la duración de la
 
 Pon las grabaciones en ./grabaciones/ con estos nombres (mp4 o mov):
     01_carlos.mp4, 02_juanpablo.mp4, 03_carlos.mp4, ...  (ver SEGMENTOS)
+Alternativa sin video: una foto de cada uno (carlos.jpg, juanpablo.jpg) y la voz
+de cada clip como audio (01_carlos.m4a, 02_juanpablo.m4a, ...).
 Si falta una grabación, se pone un recuadro "GRABAR AQUÍ" (vista previa).
 
 Uso:  python3 generar/montaje.py      ->  salida/video_final.mp4
@@ -67,6 +69,21 @@ def grabacion(n, quien):
     return None
 
 
+def foto_y_audio(n, quien):
+    """Alternativa: una foto (jpg/png) + la voz real grabada (m4a/mp3/wav/ogg/opus)."""
+    foto = audio = None
+    for ext in ("jpg", "jpeg", "png", "JPG", "JPEG", "PNG", "heic"):
+        hits = glob.glob(os.path.join(GRAB, f"{quien}.{ext}")) + \
+               glob.glob(os.path.join(GRAB, f"{n:02d}_{quien}.{ext}"))
+        if hits:
+            foto = hits[0]
+    for ext in ("m4a", "mp3", "wav", "ogg", "opus", "aac", "M4A", "MP3", "WAV"):
+        hits = glob.glob(os.path.join(GRAB, f"{n:02d}_{quien}.{ext}"))
+        if hits:
+            audio = hits[0]
+    return (foto, audio) if foto and audio else (None, None)
+
+
 def segmento(n, quien, clips, parte):
     lista = os.path.join(TMP, f"anim{n}.txt")
     with open(lista, "w") as f:
@@ -77,6 +94,19 @@ def segmento(n, quien, clips, parte):
     A = duracion(anim)
 
     cam = grabacion(n, quien)
+    foto, audio = (None, None) if cam else foto_y_audio(n, quien)
+    if foto:
+        # foto fija con un acercamiento lento + la voz real
+        cam_v = os.path.join(TMP, f"foto{n}.mp4")
+        D0 = duracion(audio)
+        frames = int(D0 * 24) + 24
+        run(["ffmpeg", "-y", "-loop", "1", "-i", foto, "-i", audio, "-filter_complex",
+             f"[0:v]scale=1280:2160:force_original_aspect_ratio=increase,crop=1280:2160,"
+             f"zoompan=z='min(1+0.0004*on,1.15)':d={frames}:x='iw/2-(iw/zoom/2)':"
+             f"y='ih/2-(ih/zoom/2)':s=640x1080:fps=24[v]",
+             "-map", "[v]", "-map", "1:a", "-t", f"{D0}", "-c:v", "libx264", "-preset", "fast",
+             "-c:a", "aac", "-pix_fmt", "yuv420p", cam_v])
+        cam = cam_v
     D = duracion(cam) if cam else A
     nombre = NOMBRES[quien]
     titulo = esc(f"Teorema de Stokes  ·  {parte}")

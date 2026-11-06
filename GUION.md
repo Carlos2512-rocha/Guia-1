@@ -28,6 +28,16 @@ animado**, que se ajusta solo a lo que dure su voz. Vista previa: `salida/video_
 | `07_carlos` (~40 s) | Carlos | "Como somos de mecatrónica, lo aplicamos a algo real: medir la corriente de un motor con una pinza amperimétrica. Dentro del cable el campo magnético es B = k⟨−y, x, 0⟩. La superficie es el corte del cable y el borde es donde lo abraza la pinza. El rotacional es ⟨0, 0, μ₀I/πa²⟩, y por el área πa² da μ₀I." |
 | `08_juanpablo` (~35 s) | Juan Pablo | "Por el borde también da μ₀I; con 10 amperios son unos 1,26 × 10⁻⁵ T·m. Esto es la ley de Ampère: la pinza mide la circulación de B, y por Stokes no importa su forma ni si el cable está centrado, solo la corriente que pasa. Por eso se mide la corriente sin cortar el cable. Gracias." |
 
+## Alternativa aprobada por el profesor: foto + voz
+
+En vez de video, cada uno manda:
+- **Una foto de frente**, bien iluminada: `carlos.jpg` y `juanpablo.jpg`.
+- **Su voz real** en audios separados (notas de voz del celular sirven): `01_carlos.m4a`,
+  `02_juanpablo.m4a`, … `08_juanpablo.m4a`, con el texto de la tabla de arriba.
+
+En el video, la foto aparece a la izquierda con un acercamiento lento mientras suena su voz.
+Se pueden mezclar: unos clips en video y otros con foto + audio.
+
 ## Para regenerar (si cambia algo)
 
 ```bash
