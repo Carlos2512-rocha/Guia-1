@@ -1,2 +1,4 @@
 .tmp_frames/
 __pycache__/
+grabaciones/*.mp4
+grabaciones/*.m4a
