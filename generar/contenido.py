@@ -7,7 +7,7 @@ NOMBRE = "Infante Rocha  ·  González Guzmán"
 OPCION3 = [
     dict(tipo="portada",
          titulo="Teorema de Stokes",
-         sub="Opción 3:  $\\mathbf{F}=\\langle z,\\,x,\\,y\\rangle$,   $S:\\ z=4-x^2-y^2,\\ z\\geq 0$",
+         sub="Ej. 1 (Opción 3):  $\\mathbf{F}=\\langle z,\\,x,\\,y\\rangle$,   $S:\\ z=4-x^2-y^2,\\ z\\geq 0$",
          dur=8),
     dict(titulo="1. El problema y el teorema",
          pasos=[
@@ -57,31 +57,31 @@ OPCION3 = [
 ]
 
 MECATRONICA = [
-    dict(titulo="Mecatrónica: la pinza amperimétrica",
+    dict(titulo="Ejercicio 2 (mecatrónica): sensor de corriente",
          pasos=[
-             (r"Cable de un motor: radio $a$, corriente $I$ a lo largo del eje $z$", "Situación real: medir la corriente de un motor"),
-             (r"$\mathbf{B}=\dfrac{\mu_0 I}{2\pi a^2}\,\langle -y,\ x,\ 0\rangle$   (dentro del cable)", "Campo magnético dentro del conductor"),
-             (r"Meta: calcular $\oint_C\mathbf{B}\cdot d\mathbf{r}$ alrededor del cable", "Eso es lo que mide una pinza amperimétrica"),
-         ], durs=[5, 6, 4]),
-    dict(tipo="cable3d", titulo="Superficie y borde del cable", dur=5),
-    dict(titulo="Mecatrónica: rotacional y superficie",
+             (r"Cable de un motor: radio $a=2\ \mathrm{mm}$, corriente $I=10\ \mathrm{A}$", "Datos reales de un motor pequeño"),
+             (r"$\mathbf{B}=k\,\langle -y,\ x,\ 0\rangle,\quad k=\dfrac{\mu_0 I}{2\pi a^2}=0.5\ \mathrm{T/m}$", "Campo magnético dentro del cable"),
+             (r"$S$: sección del cable $x^2+y^2\leq a^2$, $z=0$, $\mathbf{n}=\mathbf{k}$", "La superficie es el corte del cable"),
+         ], durs=[5, 7, 5]),
+    dict(tipo="cable3d", titulo="Ejercicio 2: superficie y borde", dur=5),
+    dict(titulo="Ejercicio 2: rotacional y superficie",
          pasos=[
-             (r"$\mathbf{B}=k\,\langle -y,\ x,\ 0\rangle$   con   $k=\dfrac{\mu_0 I}{2\pi a^2}$", "Llamé k a la constante"),
-             (r"$\mathrm{rot}\,\mathbf{B}=\langle 0,\ 0,\ k(1-(-1))\rangle=\left\langle 0,\ 0,\ \dfrac{\mu_0 I}{\pi a^2}\right\rangle$", "Rotacional (como en la Fase 3)"),
-             (r"$S$: sección del cable $x^2+y^2\leq a^2$ en $z=0$,   $\mathbf{n}=\mathbf{k}$", "La superficie es el corte transversal"),
-             (r"$\iint_S(\mathrm{rot}\,\mathbf{B})\cdot\mathbf{n}\,dS=\dfrac{\mu_0 I}{\pi a^2}\cdot\pi a^2=\mu_0 I$", "Rotacional constante × área"),
-         ], durs=[4, 6, 4, 5], resalta_ultimo=True),
-    dict(titulo="Mecatrónica: línea y números",
+             (r"$P=-ky,\quad Q=kx,\quad R=0$", "Componentes del campo"),
+             (r"$\mathrm{rot}\,\mathbf{B}=\langle 0,\ 0,\ k-(-k)\rangle=\langle 0,\ 0,\ 2k\rangle=\langle 0,0,1\rangle\ \mathrm{T/m}$", "Rotacional constante"),
+             (r"$\iint_S(\mathrm{rot}\,\mathbf{B})\cdot\mathbf{n}\,dS=1\cdot\pi a^2=\pi(0.002)^2$", "Rotacional por el área"),
+             (r"$=1.2566\times10^{-5}\ \mathrm{T\cdot m}$", "Resultado camino 1"),
+         ], durs=[4, 6, 5, 4], resalta_ultimo=True),
+    dict(titulo="Ejercicio 2: integral de línea",
          pasos=[
-             (r"$\mathbf{r}(t)=\langle a\cos t,\ a\sin t,\ 0\rangle,\qquad \mathbf{B}\cdot\mathbf{r}'=k\,a^2=\dfrac{\mu_0 I}{2\pi}$", "Parametricé el borde del cable"),
-             (r"$\oint_C\mathbf{B}\cdot d\mathbf{r}=\int_0^{2\pi}\dfrac{\mu_0 I}{2\pi}\,dt=\mu_0 I$", "Coincide con la superficie"),
-             (r"Con $I=10\ \mathrm{A}$:   $\mu_0 I=4\pi\times10^{-7}\cdot 10\approx 1.26\times 10^{-5}\ \mathrm{T\cdot m}$", "Valor numérico"),
-         ], durs=[5, 5, 5], resalta_segundo=True),
-    dict(titulo="Mecatrónica: ¿para qué sirve?",
+             (r"$\mathbf{r}(t)=\langle a\cos t,\ a\sin t,\ 0\rangle,\quad \mathbf{r}'=\langle -a\sin t,\ a\cos t,\ 0\rangle$", "Parametricé el borde"),
+             (r"$\mathbf{B}\cdot\mathbf{r}'=k a^2(\sin^2 t+\cos^2 t)=k a^2=2\times10^{-6}$", "Producto punto"),
+             (r"$\oint_C\mathbf{B}\cdot d\mathbf{r}=2\pi\cdot 2\times10^{-6}=1.2566\times10^{-5}\ \mathrm{T\cdot m}$", "Resultado camino 2"),
+         ], durs=[6, 6, 5], resalta_ultimo=True),
+    dict(titulo="Ejercicio 2: interpretación",
          pasos=[
-             (r"$\oint_C\mathbf{B}\cdot d\mathbf{r}=\mu_0 I_{\mathrm{encerrada}}$   (ley de Ampère = Stokes)", "Stokes aplicado al campo magnético"),
-             (r"La pinza mide la circulación de $\mathbf{B}$ en su borde", "El sensor rodea el cable"),
-             (r"y no importa su forma ni si el cable está centrado:", "Solo cuenta la corriente que atraviesa"),
-             (r"solo cuenta la corriente $I$ que cruza la superficie.", "Medición de corriente sin cortar el cable"),
-         ], durs=[6, 4, 4, 5], resalta_primero=True),
+             (r"$1.2566\times10^{-5}=\mu_0 I=4\pi\times10^{-7}\cdot 10$   (ley de Ampère)", "Los dos caminos coinciden"),
+             (r"La pinza amperimétrica mide la circulación de $\mathbf{B}$", "El sensor rodea el cable"),
+             (r"y no importa su forma ni si el cable está centrado:", "Solo cuenta lo que atraviesa"),
+             (r"solo la corriente que cruza la superficie.", "Medir sin cortar el cable"),
+         ], durs=[6, 5, 5, 5], resalta_primero=True),
 ]

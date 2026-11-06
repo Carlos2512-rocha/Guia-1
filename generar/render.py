@@ -134,7 +134,7 @@ def fig_cable(azim, ruta=None, fig=None, rect=(0.0, 0.03, 0.62, 0.86)):
     propia = fig is None
     if propia:
         fig = plt.figure(figsize=(W, H), dpi=100)
-        _marco(fig, "Superficie y borde del cable", f"{NOMBRE}  ·  Aplicación en mecatrónica")
+        _marco(fig, "Ejercicio 2: superficie y borde", f"{NOMBRE}  ·  Ejercicio 2 (mecatrónica)")
         fig.text(0.62, 0.74, r"Corriente $I$ por el eje $z$", fontsize=32, color="#B45309")
         fig.text(0.62, 0.62, r"$S$: sección del cable (radio $a$)", fontsize=28)
         fig.text(0.62, 0.50, r"Borde $C$: donde abraza la pinza", fontsize=30, color="#B91C1C")
@@ -224,7 +224,7 @@ def hoja_pdf(ruta):
     with PdfPages(ruta) as pdf:
         for nombre_bloque, secciones, fig3d in (
                 ("Opción 3:  F = ⟨z, x, y⟩,  S: z = 4 − x² − y², z ≥ 0, normal hacia arriba", OPCION3, fig_paraboloide),
-                ("Aplicación en mecatrónica: pinza amperimétrica y ley de Ampère", MECATRONICA, fig_cable)):
+                ("Ejercicio 2 (mecatrónica): sensor de corriente en el cable de un motor", MECATRONICA, fig_cable)):
             fig = plt.figure(figsize=A4)
             fig.patch.set_facecolor("white")
             y = 0.95
@@ -254,9 +254,9 @@ def hoja_pdf(ruta):
 if __name__ == "__main__":
     os.makedirs(SALIDA, exist_ok=True)
     print("Opción 3 …")
-    construir("op3", OPCION3, "Opción 3", fig_paraboloide)
+    construir("op3", OPCION3, "Ejercicio 1 (Opción 3)", fig_paraboloide)
     print("Mecatrónica …")
-    construir("mec", MECATRONICA, "Aplicación en mecatrónica", fig_cable)
+    construir("mec", MECATRONICA, "Ejercicio 2 (mecatrónica)", fig_cable)
     hoja_pdf(os.path.join(SALIDA, "hoja_de_respuestas.pdf"))
     print("PDF listo")
     shutil.rmtree(TMP, ignore_errors=True)
