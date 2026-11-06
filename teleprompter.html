@@ -1,0 +1,118 @@
+<title>Teleprompter Stokes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Una columna angosta de texto grande, la línea de lectura arriba (bajo la cámara), controles abajo. */
+:root{
+  --bg:#F3F5F2; --fg:#16201B; --muted:#5E6B64; --accent:#2F6B4F; --pause:#B45309; --line:#DDE3DF; --panel:#FFFFFF;
+  --body:"Atkinson Hyperlegible",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --size:44px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0E1411;--fg:#EEF3EF;--muted:#94A39A;--accent:#7FC8A2;--pause:#F2B05E;--line:#24302A;--panel:#151D19;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E1411;--fg:#EEF3EF;--muted:#94A39A;--accent:#7FC8A2;--pause:#F2B05E;--line:#24302A;--panel:#151D19;color-scheme:dark}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);display:flex;flex-direction:column}
+.top{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line);background:var(--panel)}
+.who{display:flex;gap:6px}
+button,select{font:inherit;font-size:15px;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:8px;padding:8px 12px;cursor:pointer}
+button[aria-pressed="true"]{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.hint{font-size:13px;color:var(--muted);max-width:48ch}
+.stage{position:relative;flex:1;min-height:0;overflow:hidden}
+.mark{position:absolute;left:0;right:0;top:18%;height:0;border-top:2px dashed var(--accent);opacity:.55;z-index:2;pointer-events:none}
+.mark::before{content:"leer aquí";position:absolute;left:max(16px,env(safe-area-inset-left,0px));top:-22px;font:500 12px var(--mono);color:var(--accent);letter-spacing:.06em;text-transform:uppercase}
+.scroll{height:100%;overflow-y:auto;scrollbar-width:none;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.scroll::-webkit-scrollbar{display:none}
+.text{max-width:22ch;margin:0 auto;padding-block:18vh 80vh;font-size:var(--size);line-height:1.45;font-weight:400}
+.v{font-weight:700;color:var(--accent)}
+.part{display:grid;gap:.3em}
+.part h2{font:500 .38em var(--mono);color:var(--accent);letter-spacing:.06em;text-transform:uppercase;margin:0}
+.part p{margin:0;text-wrap:pretty}
+.act{font-weight:400;font-style:italic;color:var(--muted);font-size:.6em}
+.pausa{margin:1.2em 0;padding:.5em 0;text-align:center;font:500 .5em var(--mono);color:var(--pause);border-block:2px solid var(--pause);letter-spacing:.08em}
+.bar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:center;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-top:1px solid var(--line);background:var(--panel)}
+.bar label{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--muted)}
+.bar output{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--fg);min-width:2ch}
+#play{min-width:120px;background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:700}
+@media (prefers-reduced-motion:reduce){.scroll{scroll-behavior:auto}}
+</style>
+
+<header class="top">
+  <div class="who" role="group" aria-label="Quién graba">
+    <button id="b-carlos" aria-pressed="true">Carlos · partes 1–4</button>
+    <button id="b-jp" aria-pressed="false">Juan Pablo · partes 5–8</button>
+  </div>
+  <p class="hint">Abre esto en el computador y pon el celular encima de la pantalla, centrado, con la cámara justo sobre la línea “leer aquí”. Columna angosta: los ojos casi no se mueven.</p>
+</header>
+
+<main class="stage">
+  <div class="mark" aria-hidden="true"></div>
+  <div class="scroll" id="scroll"><div class="text" id="text"></div></div>
+</main>
+
+<footer class="bar">
+  <button id="play">▶ Empezar</button>
+  <button id="restart">↺ Inicio</button>
+  <label for="speed">Velocidad <input id="speed" type="range" min="10" max="120" value="45"><output id="speedv">45</output></label>
+  <label for="size">Letra <input id="size" type="range" min="28" max="80" value="44"><output id="sizev">44</output></label>
+</footer>
+
+<script>
+const GUION = {
+  carlos: [
+    ["Parte 1 · Presentación y Ejercicio 1", "Hola, somos Carlos Andrés Infante Rocha y Juan Pablo González Guzmán, estudiantes de ingeniería mecatrónica. En este video vamos a resolver dos ejercicios con el Teorema de Stokes. El primero es la opción 3 de la guía: el campo F igual a z, x, <b class=\"v\">y</b>, sobre el paraboloide z igual a 4 menos x al cuadrado menos <b class=\"v\">y</b> al cuadrado, con la normal hacia arriba. El segundo ejercicio lo planteamos nosotros, aplicado a mecatrónica. Stokes dice que la circulación por el borde es igual al flujo del rotacional, y lo vamos a comprobar por dos caminos."],
+    ["Parte 2 · Superficie, normal y borde", "<span class='act'>(mano derecha, pulgar arriba)</span> La superficie es como una cúpula con el punto más alto en z igual a 4. Para encontrar el borde la corté con el piso, z igual a cero. Queda x al cuadrado más <b class=\"v\">y</b> al cuadrado igual a 4: una circunferencia de radio 2 en el plano z igual a cero. Como la normal va hacia arriba, uso la regla de la mano derecha: pulgar arriba, y los dedos dicen que el borde se recorre en sentido antihorario visto desde arriba. Para la normal derivé g: g sub x es menos 2x y g sub <b class=\"v\">y</b> es menos 2<b class=\"v\">y</b>, entonces n dS es 2x, 2<b class=\"v\">y</b>, 1, por dA."],
+    ["Parte 3 · Rotacional", "Ahora el rotacional. Identifiqué las componentes del campo: P igual a z, Q igual a x y R igual a <b class=\"v\">y</b>. La fórmula es R sub y menos Q sub z, P sub z menos R sub x, y Q sub x menos P sub <b class=\"v\">y</b>. Cada componente queda 1 menos 0. Entonces el rotacional de F es 1, 1, 1. Es constante: el campo gira igual en todos los puntos."],
+    ["Parte 4 · Camino 1: superficie", "Primer camino, la integral de superficie. Hago el producto punto entre el rotacional, 1, 1, 1, y la normal, 2x, 2<b class=\"v\">y</b>, 1. Eso da 2x más 2y más 1. Integro sobre la sombra de la cúpula, el disco de radio 2. Las integrales de 2x y de 2<b class=\"v\">y</b> dan cero por simetría. Solo queda la integral de 1, que es el área del disco: pi por 2 al cuadrado, o sea 4 pi. Ahora Juan Pablo hace el otro camino."]
+  ],
+  jp: [
+    ["Parte 5 · Ejercicio 1, camino 2: línea", "Gracias, Carlos. Ahora el segundo camino, la integral de línea por el borde. Parametricé la circunferencia como r de t igual a 2 coseno de t, 2 seno de t, 0, con t de cero a 2 pi, que es el sentido antihorario. La derivada es menos 2 seno de t, 2 coseno de t, 0. Reemplacé en el campo y, como en el borde z vale cero, queda 0, 2 coseno de t, 2 seno de t. El producto punto da 4 coseno cuadrado de t. Con la identidad del ángulo doble, la integral de 0 a 2 pi da 4 pi."],
+    ["Parte 6 · Ejercicio 1, conclusión", "Los dos caminos dan 4 pi, así que se cumple el Teorema de Stokes. En palabras simples: todo lo que el campo gira dentro de la cúpula se puede medir solamente recorriendo su borde."],
+    ["Parte 7 · Ejercicio 2", "El segundo ejercicio es de mecatrónica. Queremos medir la corriente del cable de un motor con una pinza, sin cortarlo. El cable tiene radio a igual a 2 milímetros y lleva 10 amperios. Dentro del cable el campo magnético es B igual a k por menos <b class=\"v\">y</b>, x, 0, donde k es mu cero por I sobre 2 pi a al cuadrado; con nuestros datos k da 0,5 tesla por metro. La superficie es el corte del cable y el borde es donde la pinza lo abraza. El rotacional es 2k, o sea 1 tesla por metro. Multiplicado por el área, pi por 0,002 al cuadrado, da 1,2566 por 10 a la menos 5 tesla metro."],
+    ["Parte 8 · Ejercicio 2: línea e interpretación", "Por el otro camino parametricé el borde como a coseno de t, a seno de t, 0. El producto punto de B con la derivada da k por a al cuadrado al cuadrado, que es 2 por 10 a la menos 6. Por 2 pi da otra vez 1,2566 por 10 a la menos 5. Ese número es exactamente mu cero por I: es la ley de Ampère, que sale directo de Stokes. Por eso una pinza amperimétrica funciona: mide la circulación del campo magnético alrededor del cable; por Stokes no importa su forma ni si el cable está centrado, solo la corriente que pasa. Gracias por su atención."]
+  ]
+};
+const $ = id => document.getElementById(id);
+const text = $("text"), scroller = $("scroll");
+let who = "carlos", playing = false, last = 0, acc = 0;
+
+function store(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }
+function load(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+
+function render(){
+  const parts = GUION[who];
+  text.innerHTML = parts.map(([h, p], i) =>
+    `<section class="part"><h2>${h}</h2><p>${p}</p></section>` +
+    (i < parts.length - 1 ? `<div class="pausa">— silencio 3 segundos —</div>` : `<div class="pausa">— fin · deja de grabar —</div>`)
+  ).join("");
+  $("b-carlos").setAttribute("aria-pressed", who === "carlos");
+  $("b-jp").setAttribute("aria-pressed", who === "jp");
+  scroller.scrollTop = 0; acc = 0;
+}
+function setPlaying(p){
+  playing = p; $("play").textContent = p ? "❚❚ Pausa" : "▶ Seguir";
+  if (p){ last = performance.now(); requestAnimationFrame(tick); }
+}
+function tick(now){
+  if (!playing) return;
+  const dt = (now - last) / 1000; last = now;
+  acc += dt * Number($("speed").value);
+  const step = Math.floor(acc); acc -= step;
+  scroller.scrollTop += step;
+  requestAnimationFrame(tick);
+}
+$("play").onclick = () => setPlaying(!playing);
+$("restart").onclick = () => { setPlaying(false); scroller.scrollTop = 0; $("play").textContent = "▶ Empezar"; };
+$("b-carlos").onclick = () => { who = "carlos"; store("tp-who", who); setPlaying(false); render(); $("play").textContent = "▶ Empezar"; };
+$("b-jp").onclick = () => { who = "jp"; store("tp-who", who); setPlaying(false); render(); $("play").textContent = "▶ Empezar"; };
+$("speed").oninput = e => { $("speedv").value = e.target.value; store("tp-speed", e.target.value); };
+$("size").oninput = e => { $("sizev").value = e.target.value; document.documentElement.style.setProperty("--size", e.target.value + "px"); store("tp-size", e.target.value); };
+document.addEventListener("keydown", e => { if (e.code === "Space" && e.target.tagName !== "INPUT"){ e.preventDefault(); setPlaying(!playing); } });
+
+const s = load("tp-speed"), z = load("tp-size"), w = load("tp-who");
+if (s){ $("speed").value = s; $("speedv").value = s; }
+if (z){ $("size").value = z; $("sizev").value = z; document.documentElement.style.setProperty("--size", z + "px"); }
+if (w === "jp" || w === "carlos") who = w;
+render();
+</script>
