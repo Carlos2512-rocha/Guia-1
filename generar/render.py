@@ -17,7 +17,7 @@ from matplotlib.patches import FancyBboxPatch
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(__file__))
-from contenido import NOMBRE, OPCION3, MECATRONICA  # noqa: E402
+from contenido import NOMBRE, INTEGRANTES, OPCION3, MECATRONICA  # noqa: E402
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SALIDA = os.path.join(RAIZ, "salida")
@@ -81,8 +81,9 @@ def portada(sec, pie, ruta):
     fig.patch.set_facecolor(VERDE)
     fig.text(0.5, 0.62, sec["titulo"], fontsize=80, color="white", ha="center", weight="bold")
     fig.text(0.5, 0.48, sec["sub"], fontsize=36, color="white", ha="center")
-    fig.text(0.5, 0.30, NOMBRE, fontsize=40, color="#FFE9A8", ha="center")
-    fig.text(0.5, 0.22, "Cálculo vectorial — Guía: Teorema de Stokes", fontsize=24,
+    for i, n in enumerate(INTEGRANTES):
+        fig.text(0.5, 0.33 - 0.07 * i, n, fontsize=40, color="#FFE9A8", ha="center")
+    fig.text(0.5, 0.12, "Cálculo vectorial — Guía: Teorema de Stokes", fontsize=24,
              color="#D1E7DA", ha="center")
     fig.savefig(ruta, facecolor=VERDE)
     plt.close(fig)
@@ -133,7 +134,7 @@ def fig_cable(azim, ruta=None, fig=None, rect=(0.0, 0.03, 0.62, 0.86)):
     propia = fig is None
     if propia:
         fig = plt.figure(figsize=(W, H), dpi=100)
-        _marco(fig, "2. Superficie y borde", f"{NOMBRE}  ·  Aplicación en mecatrónica")
+        _marco(fig, "Superficie y borde del cable", f"{NOMBRE}  ·  Aplicación en mecatrónica")
         fig.text(0.62, 0.74, r"Corriente $I$ por el eje $z$", fontsize=32, color="#B45309")
         fig.text(0.62, 0.62, r"$S$: sección del cable (radio $a$)", fontsize=28)
         fig.text(0.62, 0.50, r"Borde $C$: donde abraza la pinza", fontsize=30, color="#B91C1C")
@@ -211,14 +212,10 @@ def construir(nombre, secciones, etiqueta, fig3d):
             clip_imagenes(lista, mp4)
         clips.append(mp4)
         print("  listo:", sec["titulo"])
-    txt = os.path.join(d, "todo.txt")
-    with open(txt, "w") as f:
-        for c in clips:
-            f.write(f"file '{c}'\n")
-    final = os.path.join(SALIDA, f"{nombre}.mp4")
-    run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", txt, "-c", "copy",
-         "-movflags", "+faststart", final])
-    print("VIDEO:", final)
+    seg = os.path.join(SALIDA, "segmentos")
+    os.makedirs(seg, exist_ok=True)
+    for k, c in enumerate(clips):
+        shutil.copy(c, os.path.join(seg, f"{nombre}_{k:02d}.mp4"))
 
 
 # ---------------------------------------------------------------- PDF
@@ -233,7 +230,7 @@ def hoja_pdf(ruta):
             y = 0.95
             fig.text(0.07, y, "Hoja de respuestas — Teorema de Stokes", fontsize=15, weight="bold", color=VERDE)
             y -= 0.03
-            fig.text(0.07, y, NOMBRE, fontsize=11)
+            fig.text(0.07, y, "Integrantes: " + ",  ".join(INTEGRANTES), fontsize=10)
             y -= 0.035
             fig.text(0.07, y, nombre_bloque, fontsize=10.5, weight="bold", color=AZUL)
             y -= 0.02
@@ -257,9 +254,9 @@ def hoja_pdf(ruta):
 if __name__ == "__main__":
     os.makedirs(SALIDA, exist_ok=True)
     print("Opción 3 …")
-    construir("video_opcion3", OPCION3, "Opción 3", fig_paraboloide)
+    construir("op3", OPCION3, "Opción 3", fig_paraboloide)
     print("Mecatrónica …")
-    construir("video_mecatronica", MECATRONICA, "Aplicación en mecatrónica", fig_cable)
+    construir("mec", MECATRONICA, "Aplicación en mecatrónica", fig_cable)
     hoja_pdf(os.path.join(SALIDA, "hoja_de_respuestas.pdf"))
     print("PDF listo")
     shutil.rmtree(TMP, ignore_errors=True)

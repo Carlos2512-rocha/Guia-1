@@ -1,45 +1,37 @@
-# Guion del video — Teorema de Stokes
+# Guion — Teorema de Stokes (un solo video)
 
-**Opción elegida: 3** → F = ⟨z, x, y⟩, S: z = 4 − x² − y², z ≥ 0, normal hacia arriba.
-Resultado: los dos caminos dan **4π**.
+**Integrantes:** Carlos Andrés Infante Rocha · Juan Pablo González Guzmán
+**Opción 3:** F = ⟨z, x, y⟩, S: z = 4 − x² − y², z ≥ 0, normal hacia arriba → los dos caminos dan **4π**.
+**Más:** aplicación en mecatrónica (pinza amperimétrica, ley de Ampère).
 
-> **Requisito de la guía:** cada integrante aparece en cámara **con el rostro visible**
-> (iluminación frontal), habla al menos una vez, y explica con sus propias palabras.
-> Video MP4 de **máximo 5 minutos**, nombres en la primera pantalla.
+## Cómo queda el video
 
-## Cómo armarlo
+Pantalla dividida: **a la izquierda, ustedes** (la grabación del celular); **a la derecha, el ejercicio
+animado**, que se ajusta solo a lo que dure su voz. Vista previa: `salida/video_final.mp4`.
 
-1. Grábate **de frente** (celular horizontal) para la presentación y la conclusión.
-2. Para la parte de cálculos usa `salida/video_opcion3.mp4` como pantalla y graba tu voz
-   encima (o grábate con la mano escribiendo/señalando la hoja).
-3. Envíame tus grabaciones y yo las uno con las animaciones, corto silencios y exporto el MP4.
+## Cómo grabar (cada uno, ~2 min en total)
 
-Las frases son una guía: dilas **con tus palabras**, no hace falta leerlas exacto.
+- Celular **en vertical**, a la altura de la cara, **luz de frente** (ventana o lámpara delante, no detrás).
+- Lugar sin ruido. Pueden mover las manos al explicar; en el clip 02 muestren la **mano derecha con el pulgar arriba**.
+- **Un clip por fila** de la tabla, con el nombre exacto (ej. `01_carlos.mp4`). Mándenlos por este chat.
+- Duración sugerida entre paréntesis. Si se pasan un poco no importa: el total debe quedar bajo **5:00**.
+- Las frases son guía: díganlas **con sus palabras**, no hace falta leerlas exacto.
 
----
-
-## Video principal (Opción 3) — ~4:00
-
-| Tiempo | En pantalla | Qué decir |
+| Clip | Quién | Qué decir |
 |---|---|---|
-| 0:00–0:20 | **Tú en cámara** (rostro) | "Hola, soy ___. Escogí la opción 3 porque el rotacional no es constante en una sola dirección y la normal sí cambia el cálculo, así que se ve mejor cómo funciona Stokes." |
-| 0:20–0:28 | Portada (animación) | — |
-| 0:28–0:50 | 1. El problema | "Tenemos el campo F = ⟨z, x, y⟩ y la superficie es un paraboloide, como una cúpula, que llega a z = 4. Stokes dice que la circulación por el borde es igual al flujo del rotacional por la superficie." |
-| 0:50–1:35 | 2. Superficie y borde (3D + pasos) | "Para hallar el borde corté la cúpula con z = 0: me queda x² + y² = 4, una circunferencia de radio 2. Como la normal va hacia arriba, con la mano derecha —**pulgar arriba** (muéstralo con tu mano)— los dedos indican que C se recorre antihorario. Luego derivé g y armé n dS = ⟨2x, 2y, 1⟩ dA." |
-| 1:35–2:01 | 3. Rotacional | "Identifiqué P = z, Q = x, R = y. Aplicando la fórmula cada componente da 1 − 0, entonces rot F = ⟨1, 1, 1⟩." |
-| 2:01–2:35 | 4. Camino 1 | "Hago el producto punto con la normal: 2x + 2y + 1. Integro sobre el disco de radio 2. Los términos 2x y 2y se cancelan por simetría, y lo que queda es el área del disco, 4π." |
-| 2:35–3:14 | 5. Camino 2 | "Ahora por el borde: parametricé r(t) = ⟨2cos t, 2sin t, 0⟩, derivé, reemplacé en F y el producto punto da 4cos²t. Con la identidad del ángulo doble la integral da 4π." |
-| 3:14–3:35 | 6. Conclusión | "Los dos caminos dan 4π, entonces se verifica el teorema." |
-| 3:35–4:00 | **Tú en cámara** | "En palabras simples: todo lo que el campo gira dentro de la cúpula se puede medir solo recorriendo el borde. No importa la forma de la superficie, importa su borde." |
+| `01_carlos` (~30 s) | Carlos | "Hola, somos Carlos Infante y Juan Pablo González. Escogimos la opción 3: el campo F = ⟨z, x, y⟩ sobre el paraboloide z = 4 − x² − y². La elegimos porque el rotacional y la normal sí importan en el cálculo. Vamos a verificar Stokes: la circulación por el borde debe ser igual al flujo del rotacional." |
+| `02_juanpablo` (~40 s) | Juan Pablo | "La superficie es como una cúpula. Para hallar el borde la corté con z = 0 y me queda x² + y² = 4, una circunferencia de radio 2. La normal va hacia arriba, entonces con la mano derecha —pulgar arriba— los dedos dicen que el borde se recorre antihorario. Derivé g y armé n dS = ⟨2x, 2y, 1⟩ dA." |
+| `03_carlos` (~25 s) | Carlos | "Para el rotacional identifiqué P = z, Q = x, R = y. Apliqué la fórmula y cada componente queda 1 menos 0, así que rot F = ⟨1, 1, 1⟩." |
+| `04_juanpablo` (~35 s) | Juan Pablo | "Primer camino, la superficie: hice el producto punto con la normal y da 2x + 2y + 1. Integro sobre el disco de radio 2. Los términos 2x y 2y se cancelan por simetría, y queda el área del disco: 4π." |
+| `05_carlos` (~40 s) | Carlos | "Segundo camino, la línea: parametricé el borde como r(t) = ⟨2cos t, 2sin t, 0⟩, lo derivé, reemplacé en F, y el producto punto da 4cos²t. Con la identidad del ángulo doble la integral da 4π." |
+| `06_juanpablo` (~20 s) | Juan Pablo | "Los dos caminos dan 4π, así que se cumple el teorema. En palabras simples: todo lo que el campo gira dentro de la cúpula se puede medir solo recorriendo el borde." |
+| `07_carlos` (~40 s) | Carlos | "Como somos de mecatrónica, lo aplicamos a algo real: medir la corriente de un motor con una pinza amperimétrica. Dentro del cable el campo magnético es B = k⟨−y, x, 0⟩. La superficie es el corte del cable y el borde es donde lo abraza la pinza. El rotacional es ⟨0, 0, μ₀I/πa²⟩, y por el área πa² da μ₀I." |
+| `08_juanpablo` (~35 s) | Juan Pablo | "Por el borde también da μ₀I; con 10 amperios son unos 1,26 × 10⁻⁵ T·m. Esto es la ley de Ampère: la pinza mide la circulación de B, y por Stokes no importa su forma ni si el cable está centrado, solo la corriente que pasa. Por eso se mide la corriente sin cortar el cable. Gracias." |
 
-## Segmento de mecatrónica — ~1:00 a 1:50
+## Para regenerar (si cambia algo)
 
-Si lo pones en el mismo video, acórtalo para no pasar de 5 min (o entrégalo aparte).
-
-| En pantalla | Qué decir |
-|---|---|
-| Portada / 1. El problema | "Como estudiante de mecatrónica, apliqué Stokes a algo real: medir la corriente de un motor con una pinza amperimétrica. Dentro del cable el campo magnético es B = k⟨−y, x, 0⟩." |
-| 2. Superficie y borde (3D) | "La superficie es el corte del cable y el borde es donde lo abraza la pinza." |
-| Rotacional y camino 1 | "El rotacional es ⟨0, 0, μ₀I/(πa²)⟩; multiplicado por el área πa² da μ₀I." |
-| Camino 2 y números | "Por el borde también da μ₀I. Con 10 amperios son unos 1,26 × 10⁻⁵ T·m." |
-| ¿Para qué sirve? (**tú en cámara** al final) | "Eso es la ley de Ampère: la pinza mide la circulación de B, y por Stokes no importa su forma ni si el cable está centrado; solo cuenta la corriente que pasa. Por eso puedo medir corriente sin cortar el cable." |
+```bash
+pip install matplotlib numpy
+python3 generar/render.py    # animaciones por sección + hoja_de_respuestas.pdf
+python3 generar/montaje.py   # junta grabaciones/ + animaciones -> salida/video_final.mp4
+```
